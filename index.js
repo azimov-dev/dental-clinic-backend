@@ -1,0 +1,30 @@
+require('dotenv').config();
+const express = require('express');
+const app = express();
+const sequelize = require('./db');
+const models = require('./models'); // loads models and associations
+
+const authRoutes = require('./routes/auth');
+const serviceRoutes = require('./routes/services');
+const patientRoutes = require('./routes/patients');
+const appointmentRoutes = require('./routes/appointments');
+
+const errorHandler = require('./middleware/errorHandler');
+
+app.use(express.json());
+
+app.use('/api/auth', authRoutes);
+app.use('/api/services', serviceRoutes);
+app.use('/api/patients', patientRoutes);
+app.use('/api/appointments', appointmentRoutes);
+
+app.use(errorHandler);
+
+const PORT = process.env.PORT || 5000;
+
+sequelize.sync({ alter: true }).then(() => {
+  app.listen(PORT, () => console.log(`🚀 Server ${PORT}-portda ishga tushdi`));
+}).catch(err => {
+  console.error('Failed to sync database', err);
+  process.exit(1);
+});
