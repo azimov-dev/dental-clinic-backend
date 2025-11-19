@@ -4,6 +4,8 @@ const app = express();
 const sequelize = require("./db");
 const models = require("./models"); // loads models and associations
 
+const { swaggerUi, swaggerSpec } = require("./swagger");
+
 const authRoutes = require("./routes/auth");
 const serviceRoutes = require("./routes/services");
 const patientRoutes = require("./routes/patients");
@@ -17,6 +19,9 @@ app.use("/api/auth", authRoutes);
 app.use("/api/services", serviceRoutes);
 app.use("/api/patients", patientRoutes);
 app.use("/api/appointments", appointmentRoutes);
+
+// Swagger
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.get("/test", async (req, res) => {
   res.send("Backend is working!");
