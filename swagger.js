@@ -1,19 +1,27 @@
-const swaggerJSDoc = require("swagger-jsdoc");
+const swaggerJsdoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
 
 const options = {
   definition: {
     openapi: "3.0.0",
     info: {
-      title: "My API",
+      title: "Dental Clinic API",
       version: "1.0.0",
-      description: "Interactive API testing with Swagger UI",
+      description: "API documentation for the dental clinic backend",
     },
-    servers: [{ url: "http://localhost:3000" }],
+    servers: [
+      {
+        url: "https://dental-clinic-backend-4yfs.onrender.com/", // change to your Render URL in production
+      },
+    ],
   },
-  apis: ["./routes/*.js"], // Point to your existing route files
+  apis: ["./routes/*.js"], // path to your route files
 };
 
-const swaggerSpec = swaggerJSDoc(options);
+const specs = swaggerJsdoc(options);
 
-module.exports = { swaggerUi, swaggerSpec };
+function setupSwagger(app) {
+  app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
+}
+
+module.exports = setupSwagger;

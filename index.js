@@ -4,7 +4,8 @@ const app = express();
 const sequelize = require("./db");
 const models = require("./models"); // loads models and associations
 
-const { swaggerUi, swaggerSpec } = require("./swagger");
+const setupSwagger = require("./swagger");
+setupSwagger(app);
 
 const authRoutes = require("./routes/auth");
 const serviceRoutes = require("./routes/services");
