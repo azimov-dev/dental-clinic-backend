@@ -21,9 +21,6 @@ app.use("/api/services", serviceRoutes);
 app.use("/api/patients", patientRoutes);
 app.use("/api/appointments", appointmentRoutes);
 
-// Swagger
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-
 app.get("/test", async (req, res) => {
   res.send("Backend is working!");
 });
