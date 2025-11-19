@@ -4,17 +4,26 @@ const authController = require("../controllers/authController");
 
 /**
  * @swagger
+ * tags:
+ *   name: Auth
+ *   description: Authentication routes
+ */
+
+/**
+ * @swagger
  * /api/auth/login:
  *   post:
- *     summary: Login user
- *     tags:
- *       - Auth
+ *     summary: Login and get JWT token
+ *     tags: [Auth]
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
  *             type: object
+ *             required:
+ *               - phone
+ *               - password
  *             properties:
  *               phone:
  *                 type: string
@@ -22,7 +31,7 @@ const authController = require("../controllers/authController");
  *                 type: string
  *     responses:
  *       200:
- *         description: Returns JWT token
+ *         description: Successfully logged in, returns JWT token
  *         content:
  *           application/json:
  *             schema:
@@ -30,6 +39,8 @@ const authController = require("../controllers/authController");
  *               properties:
  *                 token:
  *                   type: string
+ *       401:
+ *         description: Invalid credentials
  */
 
 router.post("/register", authController.register);

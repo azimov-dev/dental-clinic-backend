@@ -14,6 +14,20 @@ const options = {
         url: "https://dental-clinic-backend-4yfs.onrender.com/", // change to your Render URL in production
       },
     ],
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: "http",
+          scheme: "bearer",
+          bearerFormat: "JWT",
+        },
+      },
+    },
+    security: [
+      {
+        bearerAuth: [],
+      },
+    ],
   },
   apis: ["./routes/*.js"], // path to your route files
 };
