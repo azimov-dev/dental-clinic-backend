@@ -6,13 +6,6 @@ const appointmentController = require("../controllers/appointmentController");
 
 /**
  * @swagger
- * tags:
- *   name: Appointments
- *   description: Appointment management
- */
-
-/**
- * @swagger
  * /api/appointments:
  *   get:
  *     summary: Get all appointments
@@ -26,30 +19,9 @@ const appointmentController = require("../controllers/appointmentController");
 
 /**
  * @swagger
- * /api/appointments/{id}:
- *   get:
- *     summary: Get appointment by ID
- *     tags: [Appointments]
- *     security:
- *       - bearerAuth: []
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: integer
- *     responses:
- *       200:
- *         description: Appointment found
- *       404:
- *         description: Not found
- */
-
-/**
- * @swagger
  * /api/appointments:
  *   post:
- *     summary: Create new appointment
+ *     summary: Create an appointment
  *     tags: [Appointments]
  *     security:
  *       - bearerAuth: []
@@ -59,22 +31,11 @@ const appointmentController = require("../controllers/appointmentController");
  *         application/json:
  *           schema:
  *             type: object
- *             required:
- *               - patient_id
- *               - doctor_id
- *               - service_id
- *               - date
  *             properties:
- *               patient_id:
- *                 type: integer
- *               doctor_id:
- *                 type: integer
- *               service_id:
- *                 type: integer
- *               date:
- *                 type: string
- *               payment_amount:
- *                 type: number
+ *               patient_id: { type: integer }
+ *               doctor_id: { type: integer }
+ *               service_id: { type: integer }
+ *               appointment_date: { type: string }
  *     responses:
  *       201:
  *         description: Appointment created
@@ -84,7 +45,7 @@ const appointmentController = require("../controllers/appointmentController");
  * @swagger
  * /api/appointments/{id}:
  *   put:
- *     summary: Update appointment
+ *     summary: Update appointment status or details
  *     tags: [Appointments]
  *     security:
  *       - bearerAuth: []
@@ -92,40 +53,25 @@ const appointmentController = require("../controllers/appointmentController");
  *       - in: path
  *         name: id
  *         required: true
- *         schema:
- *           type: integer
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
  *     responses:
  *       200:
  *         description: Updated
- *       404:
- *         description: Not found
  */
 
 /**
  * @swagger
  * /api/appointments/{id}:
  *   delete:
- *     summary: Delete appointment
+ *     summary: Delete an appointment
  *     tags: [Appointments]
  *     security:
  *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
- *         required: true
- *         schema:
- *           type: integer
  *     responses:
  *       200:
- *         description: Deleted
- *       404:
- *         description: Not found
+ *         description: Appointment deleted
  */
 
 router.post(

@@ -6,14 +6,7 @@ const serviceController = require("../controllers/serviceController");
 
 /**
  * @swagger
- * tags:
- *   name: Services
- *   description: Dental services management
- */
-
-/**
- * @swagger
- * /services:
+ * /api/services:
  *   get:
  *     summary: Get all dental services
  *     tags: [Services]
@@ -21,40 +14,14 @@ const serviceController = require("../controllers/serviceController");
  *       - bearerAuth: []
  *     responses:
  *       200:
- *         description: List of all services
- *       401:
- *         description: Unauthorized
+ *         description: List of services
  */
 
 /**
  * @swagger
- * /services/{id}:
- *   get:
- *     summary: Get a service by ID
- *     tags: [Services]
- *     security:
- *       - bearerAuth: []
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         description: Service ID
- *         schema:
- *           type: string
- *     responses:
- *       200:
- *         description: Service info
- *       404:
- *         description: Service not found
- *       401:
- *         description: Unauthorized
- */
-
-/**
- * @swagger
- * /services:
+ * /api/services:
  *   post:
- *     summary: Create a new service
+ *     summary: Create a dental service
  *     tags: [Services]
  *     security:
  *       - bearerAuth: []
@@ -64,30 +31,17 @@ const serviceController = require("../controllers/serviceController");
  *         application/json:
  *           schema:
  *             type: object
- *             required:
- *               - name
- *               - price
- *               - doctorShare
  *             properties:
- *               name:
- *                 type: string
- *               price:
- *                 type: number
- *               doctorShare:
- *                 type: number
- *                 description: Percentage share for doctor
+ *               name: { type: string }
+ *               price: { type: integer }
  *     responses:
  *       201:
- *         description: Service created successfully
- *       400:
- *         description: Bad request
- *       401:
- *         description: Unauthorized
+ *         description: Service created
  */
 
 /**
  * @swagger
- * /services/{id}:
+ * /api/services/{id}:
  *   put:
  *     summary: Update a service
  *     tags: [Services]
@@ -97,34 +51,14 @@ const serviceController = require("../controllers/serviceController");
  *       - in: path
  *         name: id
  *         required: true
- *         description: Service ID
- *         schema:
- *           type: string
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               name:
- *                 type: string
- *               price:
- *                 type: number
- *               doctorShare:
- *                 type: number
  *     responses:
  *       200:
- *         description: Service updated
- *       404:
- *         description: Service not found
- *       401:
- *         description: Unauthorized
+ *         description: Updated
  */
 
 /**
  * @swagger
- * /services/{id}:
+ * /api/services/{id}:
  *   delete:
  *     summary: Delete a service
  *     tags: [Services]
@@ -133,17 +67,9 @@ const serviceController = require("../controllers/serviceController");
  *     parameters:
  *       - in: path
  *         name: id
- *         required: true
- *         schema:
- *           type: string
- *         description: Service ID
  *     responses:
  *       200:
- *         description: Service deleted
- *       404:
- *         description: Service not found
- *       401:
- *         description: Unauthorized
+ *         description: Deleted
  */
 
 router.get(
