@@ -3,6 +3,21 @@ const express = require("express");
 const app = express();
 const sequelize = require("./db");
 const models = require("./models"); // loads models and associations
+const cors = require("cors");
+
+app.use(
+  cors({
+    origin: [
+      "http://localhost:5173", // dev Vite
+      "https://dental-clinic-frontend.onrender.com", // your prod frontend (when you have one)
+    ],
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
+  }),
+);
+
+app.options("*", cors());
 
 const setupSwagger = require("./swagger");
 setupSwagger(app);
