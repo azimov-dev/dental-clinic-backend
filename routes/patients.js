@@ -21,52 +21,110 @@ const patientController = require("../controllers/patientController");
  *       - bearerAuth: []
  *     responses:
  *       200:
- *         description: List of all patients
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 type: object
- *                 properties:
- *                   id:
- *                     type: integer
- *                   first_name:
- *                     type: string
- *                   last_name:
- *                     type: string
- *                   phone:
- *                     type: string
- *                   birth_date:
- *                     type: string
- *                   address:
- *                     type: string
- *       401:
- *         description: Unauthorized
+ *         description: List of patients
  */
 
 /**
  * @swagger
  * /api/patients/{id}:
  *   get:
- *     summary: Get a single patient by ID
+ *     summary: Get patient by ID
  *     tags: [Patients]
  *     security:
  *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
+ *         required: true
  *         schema:
  *           type: integer
- *         required: true
- *         description: Patient ID
  *     responses:
  *       200:
- *         description: Patient data
+ *         description: Patient found
  *       404:
  *         description: Patient not found
- *       401:
- *         description: Unauthorized
+ */
+
+/**
+ * @swagger
+ * /api/patients:
+ *   post:
+ *     summary: Create a new patient
+ *     tags: [Patients]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - first_name
+ *               - last_name
+ *               - phone
+ *             properties:
+ *               first_name:
+ *                 type: string
+ *               last_name:
+ *                 type: string
+ *               phone:
+ *                 type: string
+ *               birth_date:
+ *                 type: string
+ *               address:
+ *                 type: string
+ *     responses:
+ *       201:
+ *         description: Patient created
+ */
+
+/**
+ * @swagger
+ * /api/patients/{id}:
+ *   put:
+ *     summary: Update patient data
+ *     tags: [Patients]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *     responses:
+ *       200:
+ *         description: Patient updated
+ *       404:
+ *         description: Patient not found
+ */
+
+/**
+ * @swagger
+ * /api/patients/{id}:
+ *   delete:
+ *     summary: Delete patient
+ *     tags: [Patients]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Patient deleted
+ *       404:
+ *         description: Patient not found
  */
 
 router.post(

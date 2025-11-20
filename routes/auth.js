@@ -31,16 +31,24 @@ const authController = require("../controllers/authController");
  *                 type: string
  *     responses:
  *       200:
- *         description: Successfully logged in, returns JWT token
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 token:
- *                   type: string
+ *         description: Successfully logged in
  *       401:
  *         description: Invalid credentials
+ */
+
+/**
+ * @swagger
+ * /api/auth/getme:
+ *   get:
+ *     summary: Get currently logged in user's info
+ *     tags: [Auth]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Returns user data
+ *       401:
+ *         description: Unauthorized
  */
 
 router.post("/register", authController.register);

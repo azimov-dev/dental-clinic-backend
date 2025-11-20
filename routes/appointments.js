@@ -21,50 +21,111 @@ const appointmentController = require("../controllers/appointmentController");
  *       - bearerAuth: []
  *     responses:
  *       200:
- *         description: List of all appointments
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 type: object
- *                 properties:
- *                   id:
- *                     type: integer
- *                   appointment_date:
- *                     type: string
- *                   status:
- *                     type: string
- *                   patient_id:
- *                     type: integer
- *                   doctor_id:
- *                     type: integer
- *       401:
- *         description: Unauthorized
+ *         description: List of appointments
  */
 
 /**
  * @swagger
  * /api/appointments/{id}:
  *   get:
- *     summary: Get a single appointment by ID
+ *     summary: Get appointment by ID
  *     tags: [Appointments]
  *     security:
  *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
+ *         required: true
  *         schema:
  *           type: integer
- *         required: true
- *         description: Appointment ID
  *     responses:
  *       200:
- *         description: Appointment data
+ *         description: Appointment found
  *       404:
- *         description: Appointment not found
- *       401:
- *         description: Unauthorized
+ *         description: Not found
+ */
+
+/**
+ * @swagger
+ * /api/appointments:
+ *   post:
+ *     summary: Create new appointment
+ *     tags: [Appointments]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - patient_id
+ *               - doctor_id
+ *               - service_id
+ *               - date
+ *             properties:
+ *               patient_id:
+ *                 type: integer
+ *               doctor_id:
+ *                 type: integer
+ *               service_id:
+ *                 type: integer
+ *               date:
+ *                 type: string
+ *               payment_amount:
+ *                 type: number
+ *     responses:
+ *       201:
+ *         description: Appointment created
+ */
+
+/**
+ * @swagger
+ * /api/appointments/{id}:
+ *   put:
+ *     summary: Update appointment
+ *     tags: [Appointments]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *     responses:
+ *       200:
+ *         description: Updated
+ *       404:
+ *         description: Not found
+ */
+
+/**
+ * @swagger
+ * /api/appointments/{id}:
+ *   delete:
+ *     summary: Delete appointment
+ *     tags: [Appointments]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Deleted
+ *       404:
+ *         description: Not found
  */
 
 router.post(
