@@ -9,15 +9,13 @@ app.use(
   cors({
     origin: [
       "http://localhost:5173", // dev Vite
-      "https://dental-clinic-frontend.onrender.com", // your prod frontend (when you have one)
+      "https://dental-clinic-frontend.onrender.com", // prod frontend (when you have one)
     ],
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,
   }),
 );
-
-app.options("*", cors());
 
 const setupSwagger = require("./swagger");
 setupSwagger(app);
