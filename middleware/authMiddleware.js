@@ -1,32 +1,39 @@
-const jwt = require('jsonwebtoken');
-require('dotenv').config();
-const { User } = require('../models');
+const jwt = require("jsonwebtoken");
+require("dotenv").config();
+const { User } = require("../models");
 
 const auth = async (req, res, next) => {
   try {
     const header = req.headers.authorization;
-    if (!header) return res.status(401).json({ message: 'No token provided' });
 
-    const token = header.split(' ')[1];
-    if (!token) return res.status(401).json({ message: 'Malformed token' });
+    if (!header || !header.startsWith("Bearer ")) {
+      return res.status(401).json({ message: "No token provided" });
+    }
 
+    const token = header.split(" ")[1];
+
+    // Verify token
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-    // load user if needed
+    // Load user
     const user = await User.findByPk(decoded.id);
-    if (!user) return res.status(401).json({ message: 'User not found' });
 
+    if (!user) {
+      return res.status(401).json({ message: "User not found" });
+    }
+
+    // Attach safe user object
     req.user = {
       id: user.id,
       role: user.role,
       full_name: user.full_name,
-      password: user.password,
-      phone: user.phone
+      phone: user.phone,
     };
+
     next();
   } catch (err) {
-    console.error('Auth error', err);
-    return res.status(401).json({ message: 'Invalid token' });
+    console.error("Auth error:", err.message);
+    return res.status(401).json({ message: "Invalid or expired token" });
   }
 };
 
