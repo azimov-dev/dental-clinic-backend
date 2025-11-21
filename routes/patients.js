@@ -104,7 +104,7 @@ const patientController = require("../controllers/patientController");
 router.post(
   "/",
   auth,
-  requiredRole(["receptionist", "admin"]),
+  requiredRole(["receptionist", "admin", "doctor"]),
   patientController.createPatient,
 );
 router.get(
