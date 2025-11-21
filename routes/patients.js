@@ -122,7 +122,7 @@ router.get(
 router.put(
   "/:id",
   auth,
-  requiredRole(["receptionist", "admin"]),
+  requiredRole(["receptionist", "admin", "doctor"]),
   patientController.updatePatient,
 );
 router.delete(
