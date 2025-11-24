@@ -1,39 +1,47 @@
 // controllers/doctorController.js
-const { Appointment, Treatment, Patient, sequelize } = require("../models");
+const { Appointment, Treatment, Patient } = require("../models");
 const { Op } = require("sequelize");
 
-// ---------- Dashboard Stats ---------- //
 // GET /api/doctor/dashboard
+// Stats for logged-in doctor (total revenue, paid, debt)
 exports.getDashboardStats = async (req, res, next) => {
   try {
     const doctorId = req.user.id;
     const { from, to } = req.query;
 
-    const dateWhere = {};
-    if (from) dateWhere[Op.gte] = new Date(from);
-    if (to) dateWhere[Op.lte] = new Date(to);
+    const where = { doctor_id: doctorId };
 
-    // total revenue = sum(treatments.total - discount)
-    const treatments = await Treatment.findAll({
-      where: {
-        doctor_id: doctorId,
-        ...(from || to ? { treatment_date: dateWhere } : {}),
-      },
-    });
+    if (from || to) {
+      where.treatment_date = {};
+      if (from) {
+        where.treatment_date[Op.gte] = new Date(from);
+      }
+      if (to) {
+        // include the whole "to" day
+        const toDate = new Date(to);
+        toDate.setDate(toDate.getDate() + 1);
+        where.treatment_date[Op.lt] = toDate;
+      }
+    }
+
+    const treatments = await Treatment.findAll({ where });
 
     let totalRevenue = 0;
     let totalPaid = 0;
     let totalDebt = 0;
 
     for (const t of treatments) {
-      const revenue = t.total_amount - t.discount_amount;
-      const paid = t.paid_amount;
+      const total = t.total_amount || 0;
+      const discount = t.discount_amount || 0;
+      const paid = t.paid_amount || 0;
+
+      const revenue = total - discount;
       totalRevenue += revenue;
       totalPaid += paid;
       totalDebt += revenue - paid;
     }
 
-    return res.json({
+    res.json({
       totalRevenue,
       totalPaid,
       totalDebt,
@@ -43,8 +51,8 @@ exports.getDashboardStats = async (req, res, next) => {
   }
 };
 
-// ---------- Calendar List (count per day) ---------- //
-// GET /api/doctor/calendar?from=2025-11-01&to=2025-11-30
+// GET /api/doctor/calendar?from=YYYY-MM-DD&to=YYYY-MM-DD
+// Returns [{ date: '2025-11-24', count: 5 }, ...]
 exports.getCalendarSummary = async (req, res, next) => {
   try {
     const doctorId = req.user.id;
@@ -54,20 +62,24 @@ exports.getCalendarSummary = async (req, res, next) => {
       return res.status(400).json({ message: "from and to required" });
     }
 
-    const appointments = await Appointment.findAll({
-      where: {
-        doctor_id: doctorId,
-        date: {
-          [Op.gte]: new Date(from),
-          [Op.lte]: new Date(to),
-        },
-      },
-    });
+    const where = {
+      doctor_id: doctorId,
+      appointment_date: {},
+    };
 
-    const result = {};
+    // from day start
+    where.appointment_date[Op.gte] = new Date(from);
+    // to day end (exclusive next day)
+    const toDate = new Date(to);
+    toDate.setDate(toDate.getDate() + 1);
+    where.appointment_date[Op.lt] = toDate;
+
+    const appointments = await Appointment.findAll({ where });
+
+    const result = {}; // { '2025-11-24': 3, ... }
 
     for (const a of appointments) {
-      const d = a.date.toISOString().split("T")[0];
+      const d = a.appointment_date.toISOString().split("T")[0];
       if (!result[d]) result[d] = 0;
       result[d]++;
     }
@@ -83,17 +95,25 @@ exports.getCalendarSummary = async (req, res, next) => {
   }
 };
 
-// ---------- Get appointments of a single day (drawer) ---------- //
 // GET /api/doctor/calendar/:date/appointments
+// date = 'YYYY-MM-DD', returns list of appointments of that day with patient info
 exports.getDayAppointments = async (req, res, next) => {
   try {
     const doctorId = req.user.id;
-    const date = req.params.date;
+    const dateStr = req.params.date; // '2025-11-24'
+
+    // from 00:00 of that day to 00:00 of next day
+    const start = new Date(`${dateStr}T00:00:00.000Z`);
+    const end = new Date(start);
+    end.setDate(end.getDate() + 1);
 
     const items = await Appointment.findAll({
       where: {
         doctor_id: doctorId,
-        date,
+        appointment_date: {
+          [Op.gte]: start,
+          [Op.lt]: end,
+        },
       },
       include: [
         {
@@ -101,7 +121,7 @@ exports.getDayAppointments = async (req, res, next) => {
           as: "patient",
         },
       ],
-      order: [["time", "ASC"]],
+      order: [["appointment_date", "ASC"]],
     });
 
     res.json(items);
