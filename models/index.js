@@ -8,6 +8,10 @@ const db = {};
 db.User = require("./User")(sequelize, Sequelize.DataTypes);
 db.Patient = require("./Patient")(sequelize, Sequelize.DataTypes);
 db.Service = require("./Service")(sequelize, Sequelize.DataTypes);
+db.ServiceCategory = require("./ServiceCategory")(
+  sequelize,
+  Sequelize.DataTypes,
+);
 db.Appointment = require("./Appointment")(sequelize, Sequelize.DataTypes);
 db.AppointmentItem = require("./AppointmentItem")(
   sequelize,
@@ -66,6 +70,16 @@ Service.hasMany(AppointmentItem, {
 AppointmentItem.belongsTo(Service, {
   foreignKey: "service_id",
   as: "service",
+});
+
+// Service categories
+Service.belongsTo(ServiceCategory, {
+  foreignKey: "category_id",
+  as: "category",
+});
+ServiceCategory.hasMany(Service, {
+  foreignKey: "category_id",
+  as: "services",
 });
 
 // ---------- Treatments ---------- //
