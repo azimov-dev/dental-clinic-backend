@@ -24,6 +24,8 @@ const authRoutes = require("./routes/auth");
 const serviceRoutes = require("./routes/services");
 const patientRoutes = require("./routes/patients");
 const appointmentRoutes = require("./routes/appointments");
+const treatmentRoutes = require("./routes/treatments");
+const paymentRoutes = require("./routes/payments");
 
 const errorHandler = require("./middleware/errorHandler");
 
@@ -33,6 +35,8 @@ app.use("/api/auth", authRoutes);
 app.use("/api/services", serviceRoutes);
 app.use("/api/patients", patientRoutes);
 app.use("/api/appointments", appointmentRoutes);
+app.use("/api/treatments", treatmentRoutes);
+app.use("/api/payments", paymentRoutes);
 
 app.get("/test", async (req, res) => {
   res.send("Backend is working!");
