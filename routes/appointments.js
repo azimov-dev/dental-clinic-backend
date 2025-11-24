@@ -99,4 +99,11 @@ router.put(
   appointmentController.updateAppointmentStatus,
 );
 
+router.get(
+  "/queue",
+  auth,
+  requiredRole(["doctor", "admin"]),
+  appointmentController.getMyQueue,
+);
+
 module.exports = router;

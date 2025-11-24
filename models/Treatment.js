@@ -30,7 +30,13 @@ module.exports = (sequelize, DataTypes) => {
       },
       status: {
         // new, doctor finished, fully paid, cancelled, etc.
-        type: DataTypes.ENUM("new", "doctor_finished", "paid", "cancelled"),
+        type: DataTypes.ENUM(
+          "planned",
+          "new",
+          "doctor_finished",
+          "paid",
+          "cancelled",
+        ),
         defaultValue: "new",
       },
 
