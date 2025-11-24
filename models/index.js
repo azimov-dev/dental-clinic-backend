@@ -24,6 +24,7 @@ const {
   User,
   Patient,
   Service,
+  ServiceCategory,
   Appointment,
   AppointmentItem,
   Treatment,
