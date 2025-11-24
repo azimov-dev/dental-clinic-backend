@@ -12,8 +12,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      color: {
-        // optional hex color for that green/red bar
+      color_hex: {
         type: DataTypes.STRING,
         allowNull: true,
       },
